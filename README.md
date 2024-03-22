@@ -12,7 +12,7 @@ This GitHub repository houses the scripts and guidance needed to replicate the e
 
 ## Setup Instructions
 
-Before you begin, ensure you have installed: Python 2 and 3, Rust, Cargo, gcc, and gcc-5. Use the `environment_py27.yml` and `environment_py39.yml` conda environment files for Python setup, and follow additional instructions for other packages.
+Before you begin, ensure you have installed: Python 2 and 3, Rust, Cargo, gcc (gcc version 9.4.0), and gcc-5. Use the `environment_py27.yml` and `environment_py39.yml` conda environment files for Python setup, and follow additional instructions for other packages.
 
 ```bash
 conda env create -f environment_py27.yml
@@ -21,8 +21,8 @@ conda env create -f environment_py39.yml
 
 1. To install m3, execute: 
 ```bash
-git clone https://github.com/liecn/flow_simulation.git
-cd flow_simulation
+git clone https://github.com/netiken/m3.git
+cd m3
 ```
 
 2. To build the C libraries for m3:
@@ -56,13 +56,13 @@ cargo run --release
 5. For training the model, ensure you're using the Python 3 environment and configure settings in `config/train_config_path.yaml`. Then execute:
 
 ```bash
-cd flow_simulation
+cd m3
 python main_path.py --train_config=./config/train_config_path.yaml --mode=train --note=m3
 ```
 
 6. To create checkpoints for the end-to-end m3 pipeline:
 ```bash
-cd flow_simulation
+cd m3
 python gen_ckpt.py
 ```
 

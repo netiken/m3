@@ -1,8 +1,8 @@
-[submodule "parsimon-eval"]
-	path = parsimon-eval
-	url = git@github.com:netiken/parsimon-eval.git
-	branch = m3
 [submodule "parsimon"]
 	path = parsimon
 	url = https://github.com/netiken/parsimon.git
+	branch = m3
+[submodule "parsimon-eval"]
+	path = parsimon-eval
+	url = https://github.com/netiken/parsimon-eval.git
 	branch = m3
