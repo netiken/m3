@@ -31,16 +31,18 @@ PARAM_VEC_INIT=np.array([0,30,18,1,1,0,0,0,30,0,0,0,0,0,0])
 args = create_parser()
 fix_seed(args.shard)
 DEVICE = torch.device(args.device)
+
+# set parameters
 model_str=""
-model_id="_e466"
+model_id="_e426"
+model_trained_dir=f"/data2/lichenni/output/m3{model_str}_shard2000_nflows1_nhosts3_nsamples20_lr10Gbps/version_0"
+output_dir=f"./ckpts"
+
 class m3_inference:
     def __init__(self):
         self.bucket_thold = 1
-        self.dir_input = f"/data1/lichenni/projects/flow_simulation/ckpts"
-        self.dir_train = (
-            # "/data2/lichenni/output/m3_llama_shard2000_nflows1_nhosts3_lr10Gbps/version_0"
-            f"/data2/lichenni/output/m3{model_str}_shard2000_nflows1_nhosts3_nsamples20_lr10Gbps/version_0"
-        )
+        self.dir_input = output_dir
+        self.dir_train = model_trained_dir
         f = open(f"{self.dir_train}/data_list.json", "r")
         data_list=json.loads(f.read())
         # [["shard1191_nflows20000_nhosts7_lr10Gbpsparam_k30", [0, 6], "_topo-pl-7_dctcp"],...]
@@ -75,7 +77,7 @@ class m3_inference:
             enable_position=model_config["enable_position"],
             enable_log=training_config["enable_log"],
             n_params=n_params,
-            save_dir='./ckpts',
+            save_dir=output_dir,
         )
         
         model.eval()
@@ -93,8 +95,8 @@ class m3_inference:
         self.bdp_dict_db = bdp_dict_db
         self.bdp_dict_db_output = bdp_dict_db_output
         
-        model.export_to_bin_llama_v0(filepath=f"./ckpts/model_llama{model_str}{model_id}.bin")
-        model.export_to_bin_mlp(filepath=f"./ckpts/model_mlp{model_str}{model_id}.bin")
+        model.export_to_bin_llama_v0(filepath=f"{output_dir}/model_llama{model_str}{model_id}.bin")
+        model.export_to_bin_mlp(filepath=f"{output_dir}/model_mlp{model_str}{model_id}.bin")
         
     def run_inference(self,idx):
         spec, src_dst_pair_target, topo_type = self.data_list[idx]
@@ -333,7 +335,7 @@ class m3_inference:
             sizebucket_to_sldn = sizebucket_to_sldn.cpu().numpy()
             num_flows_per_cell = num_flows_per_cell.cpu().numpy()
             
-            np.savetxt(f'./ckpts/{spec[0]}/feat_output_py.txt', sizebucket_to_sldn_input, fmt='%f',newline=' ')
+            np.savetxt(f'{output_dir}/{spec[0]}/feat_output_py.txt', sizebucket_to_sldn_input, fmt='%f',newline=' ')
             # sizebucket_to_sldn_est=sizebucket_to_sldn_est.reshape(x_len_output,y_len)
             # sizebucket_to_sldn=sizebucket_to_sldn.reshape(x_len_output,y_len)
             

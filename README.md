@@ -41,15 +41,14 @@ git submodule update --init --recursive
 4. For setting up the HPCC repository for data generation, follow the detailed instructions in `parsimon/backends/High-Precision-Congestion-Control/simulation/README.md`:
 
 ```bash
-cd parsimon/backends/High-Precision-Congestion-Control
-cd simulation
+cd parsimon/backends/High-Precision-Congestion-Control/simulation
 CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
 ```
 
-4. To generate data for m3, adjust generation parameters in `gen_path/src/main.rs` (lines 17-28) and data parameters in `simulation/consts.py`. Then, run:
+4. To generate the synthetic data for m3, adjust generation parameters in `gen_path/src/main.rs` (lines 17-28) and data parameters in `simulation/consts.py`. Then, run:
 
 ```bash
-cd gen_path
+cd parsimon/backends/High-Precision-Congestion-Control/gen_path
 cargo run --release
 ```
 
@@ -60,22 +59,23 @@ cd m3
 python main_path.py --train_config=./config/train_config_path.yaml --mode=train --note=m3
 ```
 
-6. To create checkpoints for the end-to-end m3 pipeline:
+6. To create checkpoints for the end-to-end m3 pipeline (remember to change the parameters in `gen_ckpt.py`):
 ```bash
 cd m3
 python gen_ckpt.py
 ```
 
-7. To replicate paper results, run the following in the `parsimon-eval/expts/fig_8 directory`:
+7. To replicate paper results, run the following commands:
 
 ```bash
+cd parsimon-eval/expts/fig_8
 # section 5.2
-cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json ns3-config
-cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json pmn-m
-cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json mlsys
+cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json ns3-config
+cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json pmn-m
+cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json mlsys
 # section 5.4
-cargo run --release -- --root=./data --mixes spec/all_config_1.mix.json ns3-config
-cargo run --release -- --root=./data --mixes spec/all_config_1.mix.json mlsys
+cargo run --release -- --root=./data --mixes spec/all_counterfactual.mix.json ns3-config
+cargo run --release -- --root=./data --mixes spec/all_counterfactual.mix.json mlsys
 ```
 
 # Repository Structure
