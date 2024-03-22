@@ -1,0 +1,46 @@
+# YAML config for dataset, training, and model parameters
+
+# Dataset parameters
+dataset:
+  dir_output: "/data2/lichenni/output"
+  dir_input: "/data2/lichenni/path_tc"
+  n_flows_list: [20000]
+  n_hosts_list: [3,5,7]
+  shard: 0
+  shard_list: [0,2000,2000] # [start, end, num]
+  sample_list: [0,20,20] # [start, end, num]
+  lr: 10
+  bucket_thold: 1
+  train_frac: 0.9
+  enable_context: True
+  topo_type: "_topo-pl-x_"
+  n_params: 19
+
+# Model parameters
+model:
+  model_name: "transformer"
+  n_layer: 4
+  n_head: 4
+  n_embd: 576 
+  block_size: 16
+  vocab_size: 200 #50257
+  dropout: 0.2
+  compile: False 
+  loss_fn_type: "l1"
+  hidden_dims: [512,512]
+  enable_position: True
+
+# Training parameters
+training:
+  gpu: [3]
+  n_epochs: 5
+  batch_size: 1
+  learning_rate: 0.0001
+  betas: [0.9, 0.95]
+  weight_decay: 0.02 
+  num_workers: 5
+  enable_val: False
+  enable_dist: False
+  enable_masked_loss: True
+  enable_weighted_loss: False
+  enable_log: False

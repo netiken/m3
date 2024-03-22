@@ -1,0 +1,7 @@
+init: 0.395000s
+maxmin-fair: 1.738000s
+feat-map: 0.503000s
+build-model: 0.000000s
+transformer: 0.022000s
+mlp: 0.001000s
+time: 2.659000s
