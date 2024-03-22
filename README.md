@@ -12,7 +12,7 @@ This GitHub repository houses the scripts and guidance needed to replicate the e
 
 ## Setup Instructions
 
-Before you begin, ensure you have installed: Python 2 and 3, Rust, Cargo, gcc (gcc version 9.4.0), and gcc-5. Use the `environment_py27.yml` and `environment_py39.yml` conda environment files for Python setup, and follow additional instructions for other packages.
+Before you begin, ensure you have installed: Python 2 and 3, Rust, Cargo, gcc, and gcc-5. Use the `environment_py27.yml` and `environment_py39.yml` conda environment files for Python setup, and follow additional instructions for other packages.
 
 ```bash
 conda env create -f environment_py27.yml
@@ -21,8 +21,8 @@ conda env create -f environment_py39.yml
 
 1. To install m3, execute: 
 ```bash
-git clone https://github.com/netiken/m3.git
-cd m3
+git clone https://github.com/liecn/flow_simulation.git
+cd flow_simulation
 ```
 
 2. To build the C libraries for m3:
@@ -41,41 +41,50 @@ git submodule update --init --recursive
 4. For setting up the HPCC repository for data generation, follow the detailed instructions in `parsimon/backends/High-Precision-Congestion-Control/simulation/README.md`:
 
 ```bash
-cd parsimon/backends/High-Precision-Congestion-Control/simulation
+cd parsimon/backends/High-Precision-Congestion-Control
+cd simulation
 CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
 ```
 
-4. To generate the synthetic data for m3, adjust generation parameters in `gen_path/src/main.rs` (lines 17-28) and data parameters in `simulation/consts.py`. Then, run:
+4. To generate data for m3, adjust generation parameters in `gen_path/src/main.rs` (lines 17-28) and data parameters in `simulation/consts.py`. Then, run:
 
 ```bash
-cd parsimon/backends/High-Precision-Congestion-Control/gen_path
+cd gen_path
 cargo run --release
 ```
 
 5. For training the model, ensure you're using the Python 3 environment and configure settings in `config/train_config_path.yaml`. Then execute:
 
 ```bash
-cd m3
+cd flow_simulation
 python main_path.py --train_config=./config/train_config_path.yaml --mode=train --note=m3
 ```
 
-6. To create checkpoints for the end-to-end m3 pipeline (remember to change the parameters in `gen_ckpt.py`):
+6. To create checkpoints for the end-to-end m3 pipeline:
 ```bash
-cd m3
+cd flow_simulation
 python gen_ckpt.py
 ```
 
-7. To replicate paper results, run the following commands:
+7. To replicate paper results, run the following in the `parsimon-eval/expts/fig_8` directory:
 
 ```bash
-cd parsimon-eval/expts/fig_8
 # section 5.2
-cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json ns3-config
-cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json pmn-m
-cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json mlsys
+cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json ns3-config
+cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json pmn-m
+cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json mlsys
 # section 5.4
-cargo run --release -- --root=./data --mixes spec/all_counterfactual.mix.json ns3-config
-cargo run --release -- --root=./data --mixes spec/all_counterfactual.mix.json mlsys
+cargo run --release -- --root=./data --mixes spec/all_config_1.mix.json ns3-config
+cargo run --release -- --root=./data --mixes spec/all_config_1.mix.json mlsys
+```
+
+8. To replicate paper results, run the following in the `parsimon-eval/expts/fig_7` directory:
+
+```bash
+# section 5.3
+cargo run --release -- --root=./data --mixes spec/0_config.mix_b_03_5.mix.json ns3
+cargo run --release -- --root=./data --mixes spec/0_config.mix_b_03_5.mix.json pmn-m
+cargo run --release -- --root=./data --mixes spec/0_config.mix_b_03_5.mix.json mlsys
 ```
 
 # Repository Structure
