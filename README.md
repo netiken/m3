@@ -21,8 +21,8 @@ conda env create -f environment_py39.yml
 
 1. To install m3, execute: 
 ```bash
-git clone https://github.com/liecn/flow_simulation.git
-cd flow_simulation
+git clone https://github.com/netiken/m3.git
+cd m3
 ```
 
 2. To build the C libraries for m3:
@@ -56,13 +56,13 @@ cargo run --release
 5. For training the model, ensure you're using the Python 3 environment and configure settings in `config/train_config_path.yaml`. Then execute:
 
 ```bash
-cd flow_simulation
+cd m3
 python main_path.py --train_config=./config/train_config_path.yaml --mode=train --note=m3
 ```
 
 6. To create checkpoints for the end-to-end m3 pipeline:
 ```bash
-cd flow_simulation
+cd m3
 python gen_ckpt.py
 ```
 
