@@ -4,7 +4,9 @@ This GitHub repository houses the scripts and guidance needed to replicate the e
 
 ## Contents
 
-- [Setup Instructions](#setup-instructions)
+- [m3: Precise Estimation of Flow-Level Performance via Machine Learning](#m3-precise-estimation-of-flow-level-performance-via-machine-learning)
+  - [Contents](#contents)
+  - [Setup Instructions](#setup-instructions)
 - [Repository Structure](#repository-structure)
 - [Citation Information](#citation-information)
 - [Acknowledgments](#acknowledgments)
@@ -12,7 +14,7 @@ This GitHub repository houses the scripts and guidance needed to replicate the e
 
 ## Setup Instructions
 
-Before you begin, ensure you have installed: Python 2 and 3, Rust, Cargo, gcc, and gcc-5. Use the `environment_py27.yml` and `environment_py39.yml` conda environment files for Python setup, and follow additional instructions for other packages.
+Before you begin, ensure you have installed: Python 2 and 3, Rust, Cargo, gcc-9, and gcc-5. Use the `environment_py27.yml` and `environment_py39.yml` conda environment files for Python setup, and follow additional instructions for other packages.
 
 ```bash
 conda env create -f environment_py27.yml
