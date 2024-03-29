@@ -12,7 +12,7 @@ This GitHub repository houses the scripts and guidance needed to replicate the e
 
 ## Setup Instructions
 
-Before you begin, ensure you have installed: Python 2 and 3, Rust, Cargo, gcc, and gcc-5. Use the `environment_py27.yml` and `environment_py39.yml` conda environment files for Python setup, and follow additional instructions for other packages.
+Before you begin, ensure you have installed: Python 2 and 3, Rust, Cargo, gcc-9, and gcc-5. Use the `environment_py27.yml` and `environment_py39.yml` conda environment files for Python setup, and follow additional instructions for other packages.
 
 ```bash
 conda env create -f environment_py27.yml
@@ -25,7 +25,7 @@ git clone https://github.com/netiken/m3.git
 cd m3
 ```
 
-2. To build the C libraries for m3:
+2. To build the C libraries for m3. via gcc-9:
 ```bash     
 cd clibs
 make run
@@ -46,18 +46,24 @@ cd simulation
 CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
 ```
 
-4. To generate data for m3, adjust generation parameters in `gen_path/src/main.rs` (lines 17-28) and data parameters in `simulation/consts.py`. Then, run:
+4. To generate data for m3, adjust generation parameters in `gen_path/src/main.rs` (lines 34-37) and data parameters in `simulation/consts.py`. Then, run:
 
 ```bash
 cd gen_path
-cargo run --release
+cargo run --release -- --python-path {path_to_python2} --output-dir {dir_to_save_data}
+
+e.g., 
+cargo run --release -- --python-path /data1/lichenni/software/anaconda3/envs/py27/bin/python --output-dir /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data
 ```
 
 5. For training the model, ensure you're using the Python 3 environment and configure settings in `config/train_config_path.yaml`. Then execute:
 
 ```bash
 cd m3
-python main_path.py --train_config=./config/train_config_path.yaml --mode=train --note=m3
+python main_path.py --train_config=./config/train_config_path.yaml --mode=train --dir_input={dir_to_save_data} --dir_output={dir_to_save_ckpts}
+
+e.g., 
+python main_path.py --train_config=./config/train_config_path.yaml --mode=train --dir_input=/data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data --dir_output=/data1/lichenni/m3/ckpts
 ```
 
 6. To create checkpoints for the end-to-end m3 pipeline:

@@ -2,8 +2,6 @@
 
 # Dataset parameters
 dataset:
-  dir_output: "/data2/lichenni/output"
-  dir_input: "/data2/lichenni/path_tc"
   n_flows_list: [20000]
   n_hosts_list: [3,5,7]
   shard: 0

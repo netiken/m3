@@ -55,9 +55,11 @@ n_params=dataset_config["n_params"]
 note_str = f"{args.note}_" if args.note else ""
 program_name = f"{note_str}shard{len(shard_list)}_nflows{len(n_flows_list)}_nhosts{len(n_hosts_list)}_nsamples{len(sample_list)}_lr{lr}Gbps"
 override_epoch_step_callback = OverrideEpochStepCallback()
+dir_output=args.dir_output
+dir_input=args.dir_input
 
 if args.mode == "train":
-    tb_logger = TensorBoardLogger(dataset_config["dir_output"], name=program_name)
+    tb_logger = TensorBoardLogger(dir_output, name=program_name)
 
     # configure logging at the root level of Lightning
     os.makedirs(tb_logger.log_dir, exist_ok=True)
@@ -94,7 +96,7 @@ if args.mode == "train":
         yaml.dump(config, f)
 
     datamodule = PathDataModule(
-        dir_input=dataset_config["dir_input"],
+        dir_input=dir_input,
         shard_list=shard_list,
         n_flows_list=n_flows_list,
         n_hosts_list=n_hosts_list,
@@ -144,7 +146,7 @@ if args.mode == "train":
         accelerator="gpu",
         devices=training_config["gpu"],
         strategy=ddp_strategy if enable_dist else "auto",
-        default_root_dir=dataset_config["dir_output"],
+        default_root_dir=dir_output,
         # log_every_n_steps=args.n_epochs_every_log,
         log_every_n_steps=1,
         val_check_interval=1.0,
@@ -195,7 +197,7 @@ else:
     logging.info(args)
 
     datamodule = PathDataModule(
-        dir_input=dataset_config["dir_input"],
+        dir_input=dir_input,
         shard_list=shard_list,
         n_flows_list=n_flows_list,
         n_hosts_list=n_hosts_list,
@@ -234,7 +236,7 @@ else:
     model_name = model_config["model_name"]
     if model_name == "transformer":
         model = FlowSimTransformer_Path.load_from_checkpoint(
-            f"{dir_train}/checkpoints/best.ckpt",
+            f"{dir_train}/checkpoints/last.ckpt",
             map_location=DEVICE,
             n_layer=model_config["n_layer"],
             n_head=model_config["n_head"],

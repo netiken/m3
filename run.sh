@@ -147,7 +147,7 @@ https://github.com/liecn/fast-mmf-fattree/compare/fdf3eb55df832a921bb2f01571a2de
 
 https://github.com/netiken/parsimon-eval/compare/87269a618651fd289bf5ac5ced404b77a17c9227...9547004da83cdde97707914f29ec1967d3e02d2e
 
-git add -A . ; git commit -m "gen new specs for counterfactual search"; git push
+git add -A . ; git commit -m "add args"; git push
 
 
 /data1/lichenni/software/anaconda3/envs/py39/lib/python3.9/site-packages/lightning_fabric/utilities/device_parser.py
