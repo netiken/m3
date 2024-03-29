@@ -49,6 +49,8 @@ def create_config():
         type=int,
         default=0,
     )
+    parser.add_argument("--shard", type=int, default=0, help="random seed")
+    parser.add_argument("--device", type=str, help="Compute device", default="cuda:1")
     # dataset config
     args = parser.parse_args()
     args.timestamp = (

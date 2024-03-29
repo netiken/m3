@@ -24,11 +24,11 @@ from util.utils import (
 )
 from util.model import FlowSimTransformer_Path
 import torch
-from util.arg_parser import create_parser
+from util.arg_parser import create_config
 import json
 PARAM_VEC_INIT=np.array([0,30,18,1,1,0,0,0,30,0,0,0,0,0,0])
 
-args = create_parser()
+args = create_config()
 fix_seed(args.shard)
 DEVICE = torch.device(args.device)
 
@@ -52,7 +52,7 @@ class m3_inference:
             training_config = config["training"]
         n_params=dataset_config["n_params"]
         model = FlowSimTransformer_Path.load_from_checkpoint(
-            f"{self.dir_train}/checkpoints/last.ckpt",
+            f"{self.dir_train}/checkpoints/best_e426.ckpt",
             map_location=DEVICE,
             n_layer=model_config["n_layer"],
             n_head=model_config["n_head"],
