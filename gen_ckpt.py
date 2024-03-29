@@ -33,9 +33,7 @@ fix_seed(args.shard)
 DEVICE = torch.device(args.device)
 
 # set parameters
-model_str=""
-model_id="_e426"
-model_trained_dir=f"/data2/lichenni/output/m3{model_str}_shard2000_nflows1_nhosts3_nsamples20_lr10Gbps/version_0"
+model_trained_dir=f"{args.dir_output}/m3_shard2000_nflows1_nhosts3_nsamples20_lr10Gbps/version_0"
 output_dir=f"./ckpts"
 
 class m3_inference:
@@ -54,7 +52,7 @@ class m3_inference:
             training_config = config["training"]
         n_params=dataset_config["n_params"]
         model = FlowSimTransformer_Path.load_from_checkpoint(
-            f"{self.dir_train}/checkpoints/best{model_id}.ckpt",
+            f"{self.dir_train}/checkpoints/last.ckpt",
             map_location=DEVICE,
             n_layer=model_config["n_layer"],
             n_head=model_config["n_head"],
@@ -95,8 +93,8 @@ class m3_inference:
         self.bdp_dict_db = bdp_dict_db
         self.bdp_dict_db_output = bdp_dict_db_output
         
-        model.export_to_bin_llama_v0(filepath=f"{output_dir}/model_llama{model_str}{model_id}.bin")
-        model.export_to_bin_mlp(filepath=f"{output_dir}/model_mlp{model_str}{model_id}.bin")
+        model.export_to_bin_llama_v0(filepath=f"{output_dir}/model_llama.bin")
+        model.export_to_bin_mlp(filepath=f"{output_dir}/model_mlp.bin")
         
     def run_inference(self,idx):
         spec, src_dst_pair_target, topo_type = self.data_list[idx]

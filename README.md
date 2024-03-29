@@ -67,12 +67,18 @@ python main_path.py --train_config=./config/train_config_path.yaml --mode=train 
 e.g., 
 python main_path.py --train_config=./config/train_config_path.yaml --mode=train --dir_input=/data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data --dir_output=/data1/lichenni/m3/ckpts
 ```
+Note to change the gpu_id in `config/train_config_path.yaml` to the desired GPU ID you wish to use. For example, we set it to [0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3], which means we use GPUs-[0,1,2,3] with 4 processes on each GPU.
+Also, change the configurations for the dataset or model for your specific use case.
 
 6. To create checkpoints for the end-to-end m3 pipeline:
 ```bash
 cd m3
-python gen_ckpt.py
+python gen_ckpt.py --dir_output={dir_to_save_ckpts}
+
+e.g., 
+python gen_ckpt.py --dir_output=/data1/lichenni/m3/ckpts
 ```
+Note the checkpoints will be saved in the `ckpts` directory, one is for the Llama-2 model and the other is for the 2-layer MLP model.
 
 7. To replicate paper results, run the following in the `parsimon-eval/expts/fig_8` directory:
 
@@ -81,10 +87,12 @@ python gen_ckpt.py
 cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json ns3-config
 cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json pmn-m
 cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json mlsys
+
 # section 5.4
 cargo run --release -- --root=./data --mixes spec/all_config_1.mix.json ns3-config
 cargo run --release -- --root=./data --mixes spec/all_config_1.mix.json mlsys
 ```
+Note that ns3-config is time-consuming and may 1-7 days to complete.
 
 8. To replicate paper results, run the following in the `parsimon-eval/expts/fig_7` directory:
 

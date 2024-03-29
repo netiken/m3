@@ -5,8 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-*.out
-run
+
 # Distribution / packaging
 .Python
 build/
@@ -180,7 +179,7 @@ cython_debug/
 *.exe
 *.out
 *.app
-
+run
 ## VM management scripts 
 remote_*
 
