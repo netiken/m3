@@ -4,7 +4,9 @@ This GitHub repository houses the scripts and guidance needed to replicate the e
 
 ## Contents
 
-- [Setup Instructions](#setup-instructions)
+- [m3: Precise Estimation of Flow-Level Performance via Machine Learning](#m3-precise-estimation-of-flow-level-performance-via-machine-learning)
+  - [Contents](#contents)
+  - [Setup Instructions](#setup-instructions)
 - [Repository Structure](#repository-structure)
 - [Citation Information](#citation-information)
 - [Acknowledgments](#acknowledgments)
