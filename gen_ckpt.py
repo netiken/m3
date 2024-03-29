@@ -52,7 +52,7 @@ class m3_inference:
             training_config = config["training"]
         n_params=dataset_config["n_params"]
         model = FlowSimTransformer_Path.load_from_checkpoint(
-            f"{self.dir_train}/checkpoints/best_e426.ckpt",
+            f"{self.dir_train}/checkpoints/last.ckpt",
             map_location=DEVICE,
             n_layer=model_config["n_layer"],
             n_head=model_config["n_head"],
