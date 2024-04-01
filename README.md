@@ -1,6 +1,6 @@
 # m3: Precise Estimation of Flow-Level Performance via Machine Learning
 
-This GitHub repository houses the scripts and guidance needed to replicate the experiments presented in our paper, "m3: Precise Estimation of Flow-Level Performance via Machine Learning". It offers all necessary tools to reproduce the experimental results documented in sections 5.2, 5.3, and 5.4 of our study.
+This GitHub repository houses the scripts and guidance needed to replicate the experiments presented in our paper, "m3: Precise Estimation of Flow-Level Performance via Machine Learning". It offers all necessary tools to reproduce the experimental results documented in sections 5.2 and 5.3 of our study.
 
 ## Contents
 
@@ -81,16 +81,13 @@ python gen_ckpt.py --dir_output=/data1/lichenni/m3/ckpts
 Note the checkpoints will be saved in the `ckpts` directory, one is for the Llama-2 model and the other is for the 2-layer MLP model.
 
 7. To replicate paper results, run the following in the `parsimon-eval/expts/fig_8` directory:
+Note all commands can be found in `parsimon-eval/run.sh`
 
 ```bash
 # section 5.2
-cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json ns3-config
-cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json pmn-m
-cargo run --release -- --root=./data --mixes spec/all_config_2.mix.json mlsys
-
-# section 5.4
-cargo run --release -- --root=./data --mixes spec/all_config_1.mix.json ns3-config
-cargo run --release -- --root=./data --mixes spec/all_config_1.mix.json mlsys
+cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json ns3-config
+cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json pmn-m
+cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json mlsys
 ```
 Note that ns3-config is time-consuming and may 1-7 days to complete.
 
