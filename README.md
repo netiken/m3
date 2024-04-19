@@ -1,6 +1,6 @@
 # m3: Precise Estimation of Flow-Level Performance via Machine Learning
 
-This GitHub repository houses the scripts and guidance needed to replicate the experiments presented in our paper, "m3: Precise Estimation of Flow-Level Performance via Machine Learning". It offers all necessary tools to reproduce the experimental results documented in sections 5.2 and 5.3 of our study.
+This GitHub repository houses the scripts and guidance needed to replicate the experiments presented in our paper, "m3: Precise Estimation of Flow-Level Performance via Machine Learning". It offers all necessary tools to reproduce the experimental results documented in sections 5.2, 5.3, and 5.4 of our study.
 
 ## Contents
 
@@ -14,11 +14,10 @@ This GitHub repository houses the scripts and guidance needed to replicate the e
 
 ## Setup Instructions
 
-Before you begin, ensure you have installed: Python 2 and 3, Rust, Cargo, gcc-9, and gcc-5. Use the `environment_py27.yml` and `environment_py39.yml` conda environment files for Python setup, and follow additional instructions for other packages.
+Before you begin, ensure you have installed: Python 3, Rust, Cargo, gcc-9, and gcc-5. Use `environment.yml` conda environment files for Python setup, and follow additional instructions for other packages.
 
 ```bash
-conda env create -f environment_py27.yml
-conda env create -f environment_py39.yml
+conda env create -f environment.yml
 ```
 
 1. To install m3, execute: 
@@ -52,10 +51,10 @@ CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
 
 ```bash
 cd gen_path
-cargo run --release -- --python-path {path_to_python2} --output-dir {dir_to_save_data}
+cargo run --release -- --python-path {path_to_python} --output-dir {dir_to_save_data}
 
 e.g., 
-cargo run --release -- --python-path /data1/lichenni/software/anaconda3/envs/py27/bin/python --output-dir /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data
+cargo run --release -- --python-path /data1/lichenni/software/anaconda3/envs/py39/bin/python --output-dir /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data
 ```
 
 5. For training the model, ensure you're using the Python 3 environment and configure settings in `config/train_config_path.yaml`. Then execute:
@@ -80,25 +79,49 @@ python gen_ckpt.py --dir_output=/data1/lichenni/m3/ckpts
 ```
 Note the checkpoints will be saved in the `ckpts` directory, one is for the Llama-2 model and the other is for the 2-layer MLP model.
 
-7. To replicate paper results, run the following in the `parsimon-eval/expts/fig_8` directory:
+7. To replicate paper results in Section 5.2, run the following in the `parsimon-eval/expts/fig_8` directory:
 Note all commands can be found in `parsimon-eval/run.sh`
 
 ```bash
-# section 5.2
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json ns3-config
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json pmn-m
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json mlsys
 ```
-Note that ns3-config is time-consuming and may 1-7 days to complete.
 
-8. To replicate paper results, run the following in the `parsimon-eval/expts/fig_7` directory:
+Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/main_dctcp.ipynb.ipynb`.
+Note that ns3-config is time-consuming and may take 1-7 days to complete.
+
+8. To replicate paper results in Section 5.3, run the following in the `parsimon-eval/expts/fig_7` directory:
 
 ```bash
-# section 5.3
-cargo run --release -- --root=./data --mixes spec/0_config.mix_b_03_5.mix.json ns3
-cargo run --release -- --root=./data --mixes spec/0_config.mix_b_03_5.mix.json pmn-m
-cargo run --release -- --root=./data --mixes spec/0_config.mix_b_03_5.mix.json mlsys
+cargo run --release -- --root=./data --mix spec/0_config.mix_b_03_5.json ns3
+cargo run --release -- --root=./data --mix spec/0_config.mix_b_03_5.json pmn-m
+cargo run --release -- --root=./data --mix spec/0_config.mix_b_03_5.json mlsys
+
+cargo run --release -- --root=./data --mix spec/1_config.mix_b_05_5.json ns3
+cargo run --release -- --root=./data --mix spec/1_config.mix_b_05_5.json pmn-m
+cargo run --release -- --root=./data --mix spec/1_config.mix_b_05_5.json mlsys
+
+cargo run --release -- --root=./data --mix spec/2_config.mix_b_07_5.json ns3
+cargo run --release -- --root=./data --mix spec/2_config.mix_b_07_5.json pmn-m
+cargo run --release -- --root=./data --mix spec/2_config.mix_b_07_5.json mlsys
 ```
+
+Then reproduce the results in the script `parsimon-eval/expts/fig_7/analysis/main_large_scale.ipynb`.
+
+9. To replicate paper results in Section 5.4, run the following in the `parsimon-eval/expts/fig_8` directory:
+
+```bash
+cargo run --release -- --root=./data_hpcc --mixes spec/all_counterfactual_hpcc.mix.json ns3-config
+cargo run --release -- --root=./data_hpcc --mixes spec/all_counterfactual_hpcc.mix.json pmn-m
+cargo run --release -- --root=./data_hpcc --mixes spec/all_counterfactual_hpcc.mix.json mlsys
+
+cargo run --release -- --root=./data_window --mixes spec/all_counterfactual_window.mix.json ns3-config
+cargo run --release -- --root=./data_window --mixes spec/all_counterfactual_window.mix.json pmn-m
+cargo run --release -- --root=./data_window --mixes spec/all_counterfactual_window.mix.json mlsys
+```
+
+Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/main_counterfactual_demo.ipynb`.
 
 # Repository Structure
 

@@ -42,4 +42,4 @@ time run ../ckpts/model_llama_all_e240.bin ../ckpts/model_mlp_all_e240.bin ../da
 
 time run ../ckpts/model_llama_e271.bin ../ckpts/model_mlp_e271.bin ../data_test/data_lr10Gbps_7_small -b 10 -e 576 -n 7 -t 1 -f 30 -k 18000 -p 1 -c 0 -x 30 
 
-time run ../ckpts/model_llama.bin ../ckpts/model_mlp.bin ../ckpts/data_lr10Gbps_7 -b 10 -e 576 -n 7 -t 1 -f 30 -k 18000 -p 1 -c 0 -x 30 
+time run ../ckpts/model_llama_config_e421.bin ../ckpts/model_mlp_config_e421.bin ../ckpts/data_lr10Gbps_7 -b 10 -e 576 -n 7 -t 1 -f 30 -k 18000 -p 1 -c 0 -x 30 

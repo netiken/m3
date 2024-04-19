@@ -1,4 +1,3 @@
-# weighted_genpar_flowsim.py
 import numpy as np
 import yaml
 import sys
@@ -35,7 +34,9 @@ DEVICE = torch.device(args.device)
 # set parameters
 model_trained_dir=f"{args.dir_output}/m3_shard2000_nflows1_nhosts3_nsamples20_lr10Gbps/version_0"
 output_dir=f"./ckpts"
-
+model_id="_config_e421"
+# model_id="_e466"
+# model_id="_hpcc_e447"
 class m3_inference:
     def __init__(self):
         self.bucket_thold = 1
@@ -52,7 +53,7 @@ class m3_inference:
             training_config = config["training"]
         n_params=dataset_config["n_params"]
         model = FlowSimTransformer_Path.load_from_checkpoint(
-            f"{self.dir_train}/checkpoints/last.ckpt",
+            f"{self.dir_train}/checkpoints/best{model_id}.ckpt",
             map_location=DEVICE,
             n_layer=model_config["n_layer"],
             n_head=model_config["n_head"],
@@ -93,8 +94,8 @@ class m3_inference:
         self.bdp_dict_db = bdp_dict_db
         self.bdp_dict_db_output = bdp_dict_db_output
         
-        model.export_to_bin_llama_v0(filepath=f"{output_dir}/model_llama.bin")
-        model.export_to_bin_mlp(filepath=f"{output_dir}/model_mlp.bin")
+        model.export_to_bin_llama_v0(filepath=f"{output_dir}/model_llama{model_id}.bin")
+        model.export_to_bin_mlp(filepath=f"{output_dir}/model_mlp{model_id}.bin")
         
     def run_inference(self,idx):
         spec, src_dst_pair_target, topo_type = self.data_list[idx]

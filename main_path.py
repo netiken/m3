@@ -184,7 +184,7 @@ if args.mode == "train":
 else:
     DEVICE = torch.device(training_config["gpu"][0])
     dir_train = (
-        f"{dataset_config['dir_output']}/{program_name}/version_{args.version_id}"
+        f"{dir_output}/{program_name}/version_{args.version_id}"
     )
     print(f"load model: {dir_train}")
 
@@ -201,19 +201,20 @@ else:
         shard_list=shard_list,
         n_flows_list=n_flows_list,
         n_hosts_list=n_hosts_list,
+        sample_list=sample_list,
         batch_size=training_config["batch_size"],
         num_workers=training_config["num_workers"],
         train_frac=dataset_config["train_frac"],
         dir_output=dir_train,
         # customized config
-        bucket_thold=dataset_config["bucket_thold"],
         lr=dataset_config["lr"],
-        test_on_train=args.test_on_train,
-        test_on_empirical=args.test_on_empirical,
-        test_on_manual=args.test_on_manual,
+        bucket_thold=dataset_config["bucket_thold"],
         enable_context=dataset_config.get("enable_context", False),
         topo_type=dataset_config.get("topo_type", ""),
         mode=args.mode,
+        test_on_train=args.test_on_train,
+        test_on_empirical=args.test_on_empirical,
+        test_on_manual=args.test_on_manual,
     )
 
     callbacks = [override_epoch_step_callback]
