@@ -80,7 +80,6 @@ python gen_ckpt.py --dir_output=/data1/lichenni/m3/ckpts
 Note the checkpoints will be saved in the `ckpts` directory, one is for the Llama-2 model and the other is for the 2-layer MLP model.
 
 7. To replicate paper results in Section 5.2, run the following in the `parsimon-eval/expts/fig_8` directory:
-Note all commands can be found in `parsimon-eval/run.sh`
 
 ```bash
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json ns3-config

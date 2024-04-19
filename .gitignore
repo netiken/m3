@@ -214,3 +214,5 @@ log_0828
 deprecated
 data_test
 run.sh
+run_c.sh
+run_parsimon_eval.sh
