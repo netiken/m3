@@ -1,18 +1,24 @@
-# m3: Precise Estimation of Flow-Level Performance via Machine Learning
+# m3: Accurate Flow-Level Performance Estimation using Machine Learning
 
-This GitHub repository houses the scripts and guidance needed to replicate the experiments presented in our paper, "m3: Precise Estimation of Flow-Level Performance via Machine Learning". It offers all necessary tools to reproduce the experimental results documented in sections 5.2, 5.3, and 5.4 of our study.
+This repository houses the scripts and guidance needed to replicate the experiments presented in our paper, "m3: Accurate Flow-Level Performance Estimation using Machine Learning". It offers all necessary tools to reproduce the experimental results documented in sections 5.2, 5.3, and 5.4 of our paper.
 
-## Contents
-
-- [m3: Precise Estimation of Flow-Level Performance via Machine Learning](#m3-precise-estimation-of-flow-level-performance-via-machine-learning)
-  - [Contents](#contents)
-  - [Setup Instructions](#setup-instructions)
+- [Quick Reproduction](#quick-reproduction)
+- [From Scratch](#from-scratch)
 - [Repository Structure](#repository-structure)
 - [Citation Information](#citation-information)
 - [Acknowledgments](#acknowledgments)
 - [Getting in Touch](#getting-in-touch)
 
-## Setup Instructions
+## Quick Reproduction
+The following steps provide a quick guide to reproduce the results in the paper.
+
+1. To replicate paper results in Section 5.2, run the script `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb.ipynb`.
+
+2. To replicate paper results in Section 5.3, run the script `parsimon-eval/expts/fig_7/analysis/analysis.ipynb`.
+
+3. To replicate paper results in Section 5.4, run the script `parsimon-eval/expts/fig_8/analysis/analysis_counterfactual.ipynb`.
+
+## From Scratch
 
 Before you begin, ensure you have installed: Python 3, Rust, Cargo, gcc-9, and gcc-5. Use `environment.yml` conda environment files for Python setup, and follow additional instructions for other packages.
 
@@ -26,7 +32,7 @@ git clone https://github.com/netiken/m3.git
 cd m3
 ```
 
-2. To build the C libraries for m3. via gcc-9:
+2. To build the C libraries for m3 via gcc-9:
 ```bash     
 cd clibs
 make run
@@ -47,7 +53,7 @@ cd simulation
 CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
 ```
 
-4. To generate data for m3, adjust generation parameters in `gen_path/src/main.rs` (lines 34-37) and data parameters in `simulation/consts.py`. Then, run:
+4. To generate data for m3, adjust generation parameters in `parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs` (lines 34-37) and data parameters in `simulation/consts.py`. Then, run:
 
 ```bash
 cd gen_path
@@ -66,7 +72,7 @@ python main_path.py --train_config=./config/train_config_path.yaml --mode=train 
 e.g., 
 python main_path.py --train_config=./config/train_config_path.yaml --mode=train --dir_input=/data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data --dir_output=/data1/lichenni/m3/ckpts
 ```
-Note to change the gpu_id in `config/train_config_path.yaml` to the desired GPU ID you wish to use. For example, we set it to [0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3], which means we use GPUs-[0,1,2,3] with 4 processes on each GPU.
+Note to change the gpu_id in `config/train_config_path.yaml` to the desired GPU ID you wish to use. For example, we set it to [0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3], which means we use GPUs-[0,1,2,3] with 4 processes on each GPU. FYI, the default PytorchLightning does not support multi-worker training on a single GPU, which requries specific modifications.
 Also, change the configurations for the dataset or model for your specific use case.
 
 6. To create checkpoints for the end-to-end m3 pipeline:
@@ -87,26 +93,23 @@ cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json pmn-m
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json mlsys
 ```
 
-Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/main_dctcp.ipynb.ipynb`.
+Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb.ipynb`.
 Note that ns3-config is time-consuming and may take 1-7 days to complete.
 
 8. To replicate paper results in Section 5.3, run the following in the `parsimon-eval/expts/fig_7` directory:
 
 ```bash
-cargo run --release -- --root=./data --mix spec/0_config.mix_b_03_5.json ns3
-cargo run --release -- --root=./data --mix spec/0_config.mix_b_03_5.json pmn-m
-cargo run --release -- --root=./data --mix spec/0_config.mix_b_03_5.json mlsys
+cargo run --release -- --root=./data --mix spec/0.mix.json ns3
+cargo run --release -- --root=./data --mix spec/0.mix.json pmn-m
+cargo run --release -- --root=./data --mix spec/0.mix.json mlsys
 
-cargo run --release -- --root=./data --mix spec/1_config.mix_b_05_5.json ns3
-cargo run --release -- --root=./data --mix spec/1_config.mix_b_05_5.json pmn-m
-cargo run --release -- --root=./data --mix spec/1_config.mix_b_05_5.json mlsys
+cargo run --release -- --root=./data --mix spec/1.mix.json ns3
+cargo run --release -- --root=./data --mix spec/1.mix.json pmn-m
+cargo run --release -- --root=./data --mix spec/1.mix.json mlsys
 
-cargo run --release -- --root=./data --mix spec/2_config.mix_b_07_5.json ns3
-cargo run --release -- --root=./data --mix spec/2_config.mix_b_07_5.json pmn-m
-cargo run --release -- --root=./data --mix spec/2_config.mix_b_07_5.json mlsys
 ```
 
-Then reproduce the results in the script `parsimon-eval/expts/fig_7/analysis/main_large_scale.ipynb`.
+Then reproduce the results in the script `parsimon-eval/expts/fig_7/analysis/analysis.ipynb`.
 
 9. To replicate paper results in Section 5.4, run the following in the `parsimon-eval/expts/fig_8` directory:
 
@@ -120,7 +123,7 @@ cargo run --release -- --root=./data_window --mixes spec/all_counterfactual_wind
 cargo run --release -- --root=./data_window --mixes spec/all_counterfactual_window.mix.json mlsys
 ```
 
-Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/main_counterfactual_demo.ipynb`.
+Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/analysis_counterfactual.ipynb`.
 
 # Repository Structure
 
