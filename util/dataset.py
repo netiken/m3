@@ -30,7 +30,6 @@ import logging
 import os
 
 def my_collate(batch):
-    # batch contains a list of tuples of structure (sequence, target)
     sizebucket_to_sldn_flowsim = [item[0] for item in batch]
     sizebucket_to_sldn_flowsim = np.concatenate(sizebucket_to_sldn_flowsim, 0)
 
@@ -42,7 +41,6 @@ def my_collate(batch):
     spec = np.array([item[4] for item in batch])
     sizebucket_to_sldn_flowsim_idx = np.array([item[5] for item in batch])
     src_dst_pair_target_str = np.array([item[6] for item in batch])
-    # src_dst_pair_target = np.array([item[7] for item in batch])
     return (
         torch.tensor(sizebucket_to_sldn_flowsim),
         torch.tensor(num_flows_per_cell_flowsim),
@@ -51,7 +49,6 @@ def my_collate(batch):
         spec,
         sizebucket_to_sldn_flowsim_idx,
         src_dst_pair_target_str,
-        # torch.tensor(src_dst_pair_target),
     )
 
 class PathDataModule(LightningDataModule):
@@ -143,9 +140,9 @@ class PathDataModule(LightningDataModule):
             self.__dump_data_list(self.dir_output)
 
         if stage == "test":
-            if self.test_on_manual:
+            if self.test_on_empirical:
                 data_list_test = []
-                for shard in np.arange(0, 3000):
+                for shard in np.arange(10000, 10200):
                     for n_flows in [30000]:
                         for n_hosts in [2, 3, 4, 5, 6, 7, 8]:
                             topo_type_cur = self.topo_type.replace(
@@ -153,9 +150,13 @@ class PathDataModule(LightningDataModule):
                             )
                             spec = f"shard{shard}_nflows{n_flows}_nhosts{n_hosts}_lr{self.lr}Gbps"
                             dir_input_tmp = f"{self.dir_input}/{spec}"
-                            if not os.path.exists(f"{dir_input_tmp}/flow_src_dst.npy"):
+                            if not os.path.exists(
+                                f"{dir_input_tmp}/flow_src_dst.npy"
+                            ):
                                 continue
-                            flow_src_dst = np.load(f"{dir_input_tmp}/flow_src_dst.npy")
+                            flow_src_dst = np.load(
+                                f"{dir_input_tmp}/flow_src_dst.npy"
+                            )
                             stats = decode_dict(
                                 np.load(
                                     f"{dir_input_tmp}/stats.npy",
@@ -163,60 +164,21 @@ class PathDataModule(LightningDataModule):
                                     encoding="bytes",
                                 ).item()
                             )
-
                             n_flows_total = stats["n_flows"]
-                            if len(flow_src_dst) == n_flows_total:
-                                target_idx = stats["host_pair_list"].index(
-                                    (0, n_hosts - 1)
-                                )
-                                size_dist = stats["size_dist_candidates"][
-                                    target_idx
-                                ].decode("utf-8")
-                                if size_dist != "gaussian":
-                                    continue
+                            if (
+                                n_flows_total < 5000000
+                                and len(flow_src_dst) == n_flows_total
+                            ):
                                 data_list_test.append(
                                     (spec, (0, n_hosts - 1), topo_type_cur)
                                 )
+                                
             else:
-                if self.test_on_empirical:
-                    data_list_test = []
-                    for shard in np.arange(10000, 10200):
-                        for n_flows in [30000]:
-                            for n_hosts in [2, 3, 4, 5, 6, 7, 8]:
-                                topo_type_cur = self.topo_type.replace(
-                                    "x-x", f"{n_hosts}-{n_hosts}"
-                                )
-                                spec = f"shard{shard}_nflows{n_flows}_nhosts{n_hosts}_lr{self.lr}Gbps"
-                                dir_input_tmp = f"{self.dir_input}/{spec}"
-                                if not os.path.exists(
-                                    f"{dir_input_tmp}/flow_src_dst.npy"
-                                ):
-                                    continue
-                                flow_src_dst = np.load(
-                                    f"{dir_input_tmp}/flow_src_dst.npy"
-                                )
-                                stats = decode_dict(
-                                    np.load(
-                                        f"{dir_input_tmp}/stats.npy",
-                                        allow_pickle=True,
-                                        encoding="bytes",
-                                    ).item()
-                                )
-                                n_flows_total = stats["n_flows"]
-                                if (
-                                    n_flows_total < 5000000
-                                    and len(flow_src_dst) == n_flows_total
-                                ):
-                                    data_list_test.append(
-                                        (spec, (0, n_hosts - 1), topo_type_cur)
-                                    )
-                                  
+                data_list = self.__read_data_list(self.dir_output)
+                if self.test_on_train:
+                    data_list_test = data_list["train"]
                 else:
-                    data_list = self.__read_data_list(self.dir_output)
-                    if self.test_on_train:
-                        data_list_test = data_list["train"]
-                    else:
-                        data_list_test = data_list["test"]
+                    data_list_test = data_list["test"]
             self.test = self.__create_dataset(
                 data_list_test,
                 self.dir_input,
@@ -520,5 +482,4 @@ class PathDataset_Context(Dataset):
             spec,
             n_input,
             src_dst_pair_target_str,
-            # np.array(src_dst_pair_target),
         )

@@ -18,11 +18,7 @@ BDP_DICT = {
     5: 10 * MTU,
     7: 15 * MTU,
 }
-# LINK_TO_DELAY_DICT={
-#     3:np.array([0,2*DELAY_PROPAGATION_BASE,0]),
-#     5:np.array([0,2*DELAY_PROPAGATION_BASE,2*DELAY_PROPAGATION_BASE,2*DELAY_PROPAGATION_BASE,0]),
-#     7:np.array([0,2*DELAY_PROPAGATION_BASE,2*DELAY_PROPAGATION_BASE,2*DELAY_PROPAGATION_BASE,2*DELAY_PROPAGATION_BASE,2*DELAY_PROPAGATION_BASE,0]),
-# }
+
 LINK_TO_DELAY_DICT={
     3:np.array([0,0,0]),
     5:np.array([0,0,1*DELAY_PROPAGATION_BASE,0,0]),
@@ -35,17 +31,6 @@ BDP_IN_BIT = (BDP + np.ceil(BDP / MTU) * HEADER_SIZE) * BYTE_TO_BIT
 MTU_IN_BYTE = MTU + np.ceil(MTU / MTU) * HEADER_SIZE
 MTU_IN_BIT = (MTU + np.ceil(MTU / MTU) * HEADER_SIZE) * BYTE_TO_BIT
 EPS = 1e-12
-# SIZE_BUCKET_LIST = (80 * (1.5 ** np.arange(19))).astype(np.int32)
-# SIZE_BUCKET_LIST = np.array([MTU, BDP, 2 * BDP, 5 * BDP, 10 * BDP, 20 * BDP, 50 * BDP])
-# P99_DIVIDENT=[np.arange(0,1),np.arange(1,2),np.arange(2,4),np.arange(4,8)]
-
-# P99_DIVIDENT=[np.arange(0,1),np.arange(1,2),np.arange(2,3),np.arange(3,4)]
-# SIZE_BUCKET_LIST = np.array([MTU,BDP,5 * BDP])
-
-# SIZE_BUCKET_LIST = np.array(
-#     [MTU // 4, MTU // 2, MTU, 2 * MTU, 5 * MTU, BDP, 2 * BDP, 3 * BDP, 5 * BDP]
-# )
-# SIZE_BUCKET_LIST_LABEL = ["(0, 0.25MTU)","(0.25MTU, 0.5MTU)","(0.5MTU, MTU)","(MTU, 2MTU)","(2MTU, 5MTU)","(5MTU, BDP)","(BDP, 2BDP)","(2BDP, 3BDP)","(3BDP, 5BDP)","(5BDP, INF)"]
 SIZE_BUCKET_LIST = np.array(
     [
         MTU // 4,
@@ -60,7 +45,6 @@ SIZE_BUCKET_LIST = np.array(
     ]
 )
 P99_DIVIDENT = [np.arange(0, 4), np.arange(4, 8), np.arange(8, 9), np.arange(9, 10)]
-# P99_DIVIDENT = [np.arange(0, 2), np.arange(2, 4), np.arange(4, 6), np.arange(6, 8)]
 
 def get_size_bucket_list(mtu, bdp):
     return np.array(
@@ -110,29 +94,8 @@ SIZE_BUCKET_LIST_LABEL = [
 
 SIZE_BUCKET_LIST_LABEL_OUTPUT = ["(0, MTU)", "(MTU, BDP)", "(BDP, 5BDP)", "(5BDP, INF)"]
 
-# P99_PERCENTILE_LIST = np.array(
-#     [30, 50, 60, 70, 75, 80, 82, 84, 86,88, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
-# )
-# P99_PERCENTILE_LIST = np.array(
-#     [10, 20, 30, 40, 50, 60, 70, 75, 80, 85, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
-# )
-# P99_PERCENTILE_LIST = np.array(
-#     [1, 25, 40, 55, 70, 75, 80, 85, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 100]
-# )
-
 P99_PERCENTILE_LIST = np.arange(1, 101, 1)
-# P99_PERCENTILE_LIST = np.arange(1, 102, 1)
-# P99_PERCENTILE_LIST[-1]=100
 
-# P99_PERCENTILE_LIST = np.array(
-#     [0, 10, 20, 30, 40, 50, 60, 70, 80, 85, 90, 91, 92, 93, 94, 95, 96, 97, 98, 98.2, 98.4, 98.6, 98.8, 99, 99.2,99.4, 99.6, 99.8, 100, 100]
-# )
-
-# P99_PERCENTILE_LIST = np.array(
-#     [1, 10, 20, 30, 40, 50, 55, 60, 65, 70, 
-#      75, 80, 85, 90, 92, 94, 96, 98, 98.2, 98.4, 
-#      98.6, 98.8, 99, 99.2, 99.4, 99.6, 99.8, 100, 100]
-# )
 PERCENTILE_METHOD='nearest'
 
 color_list = [
@@ -143,32 +106,10 @@ color_list = [
     "seagreen",
     "black",
 ]
-# color_list = [
-#     "C1",
-#     "C2",
-#     "C3",
-#     "C4",
-#     "C5",
-#     "C6",
-#     "C7",
-# ]
+
 hatch_list = ["o", "x", "/", ".", "*", "-", "\\"]
 linestyle_list = ["solid", "dashed", "dashdot", "dotted"]
 markertype_list = ["o", "^", "x", "x", "|"]
-
-# FLOWSIZE_BUCKET_DICT = {
-#     0: "0<size<=MTU",
-#     1: "MTU<size<=BDP",
-#     2: "BDP<size<=10BDP",
-#     3: "10BDP<size",
-# }
-# FLOWSIZE_BUCKET_DICT = {
-#     0: "(0,MTU]",
-#     1: "(MTU,BDP]",
-#     2: "(BDP,5BDP]",
-#     3: "(5BDP,inf)",
-# }
-# SIZE_BIN_LIST = [MTU, BDP, 5 * BDP]
 
 SIZEDIST_LIST_EMPIRICAL = [
     "GoogleRPC2008",

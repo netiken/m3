@@ -1,19 +1,14 @@
-import torch.nn as nn
 import torch
 import random
 import numpy as np
 import logging
 from .consts import (
-    # C_LIB_PATH,
     color_list,
-    hatch_list,
     linestyle_list,
     markertype_list,
 )
 from ctypes import *
 import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-import matplotlib.font_manager as font_manager
 
 import seaborn as sns
 from textwrap import wrap

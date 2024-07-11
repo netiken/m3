@@ -80,7 +80,6 @@ class m3_inference:
         model.eval()
         self.model=model
         self.lr=10
-        # self.bucket_thold = dataset_config["bucket_thold"]
         self.enable_context = dataset_config.get("enable_context", False)
         self.enable_log=training_config["enable_log"]
         bdp_dict_db = {}
@@ -102,7 +101,7 @@ class m3_inference:
         size_bucket_list = self.bdp_dict_db[n_hosts]
         size_bucket_list_output = self.bdp_dict_db_output[n_hosts]
         print(f"spec-1: {spec}, {topo_type}")   
-        spec=f'data_lr10Gbps_{n_hosts}'
+        spec=f'data_lr10Gbps'
         print(f"spec-2: {spec}")
         
         dir_input_tmp = f"{self.dir_input}/{spec}"

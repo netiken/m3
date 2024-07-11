@@ -1,5 +1,4 @@
 import torch
-import torch.distributed as dist
 
 from pytorch_lightning import LightningModule
 import torch.nn as nn
@@ -273,7 +272,6 @@ class FlowSimTransformer_Path(FlowSimTransformer_Base):
             spec,
             sizebucket_to_sldn_flowsim_idx,
             src_dst_pair_target_str,
-            # src_dst_pair_target,
         ) = batch
         
         if self.enable_const_opt:
@@ -300,7 +298,6 @@ class FlowSimTransformer_Path(FlowSimTransformer_Base):
                     idx_start + 1 : idx_start + idx_interval
                 ]
                 
-                # tmp=torch.flatten(tmp).long()
                 sizebucket_to_sldn_background, _ = self.model_transformer(
                     tmp[None, :]
                 )
@@ -315,7 +312,6 @@ class FlowSimTransformer_Path(FlowSimTransformer_Base):
         else:
             sizebucket_to_sldn_foreground = sizebucket_to_sldn_flowsim[:, 0, :]
             sizebucket_to_sldn_input = sizebucket_to_sldn_foreground
-        # Instead of sizebucket_to_sldn_est = self.model_mlp(sizebucket_to_sldn_input) + 1.0
         sizebucket_to_sldn_est = self.model_mlp(sizebucket_to_sldn_input)
         sizebucket_to_sldn_est.add_(1.0)  # In-place addition
         
@@ -348,37 +344,20 @@ class FlowSimTransformer_Path(FlowSimTransformer_Base):
                 prog_bar=True,
                 batch_size=self.batch_size,
             )
-        # logging.info(f"step-{batch_idx}-{tag}_loss: {loss}")
 
         if tag == "test":
             test_dir = f"{self.save_dir}/{spec[0]}_{src_dst_pair_target_str[0]}"
-            # logging.info(f"save to {test_dir}")
             os.makedirs(test_dir, exist_ok=True)
             sizebucket_to_sldn_flowsim = sizebucket_to_sldn_flowsim.cpu().numpy()[0]
             sizebucket_to_sldn_est = sizebucket_to_sldn_est.cpu().numpy()[0]
             sizebucket_to_sldn = sizebucket_to_sldn.cpu().numpy()[0]
             num_flows_per_cell = num_flows_per_cell.cpu().numpy()[0]
-            # num_flows_per_cell_flowsim_ori=num_flows_per_cell_flowsim_ori.cpu().numpy()[0]
-            # num_flows_per_cell_flowsim=num_flows_per_cell_flowsim.cpu().numpy()[0]
-            # error = np.divide(
-            #     abs(sizebucket_to_sldn_est - sizebucket_to_sldn),
-            #     sizebucket_to_sldn,
-            #     out=np.zeros_like(sizebucket_to_sldn),
-            #     where=sizebucket_to_sldn != 0,
-            # )
-            # logging.info(
-            #     np.round(np.nanmin(error), 3),
-            #     np.round(np.nanpercentile(error, 50), 3),
-            #     np.round(np.nanmax(error), 3),
-            # )
             np.savez(
                 f"{test_dir}/res.npz",
                 sizebucket_to_sldn_est=sizebucket_to_sldn_est,
                 sizebucket_to_sldn_flowsim=sizebucket_to_sldn_flowsim,
                 sizebucket_to_sldn=sizebucket_to_sldn,
                 num_flows_per_cell=num_flows_per_cell,
-                # num_flows_per_cell_flowsim_ori=num_flows_per_cell_flowsim_ori,
-                # num_flows_per_cell_flowsim=num_flows_per_cell_flowsim,
             )
         return loss
 
@@ -386,9 +365,6 @@ class FlowSimTransformer_Path(FlowSimTransformer_Base):
         optimizer = self.model_transformer.configure_optimizers(
             self.weight_decay, self.learning_rate, self.betas
         )
-        # optimizer_mlp = torch.optim.Adam(
-        #     self.model.parameters(), lr=self.learning_rate
-        # )
         optimizer.add_param_group(
             {"params": self.model_mlp.parameters(), "weight_decay": 0.0}
         )
@@ -396,5 +372,4 @@ class FlowSimTransformer_Path(FlowSimTransformer_Base):
             optimizer.add_param_group(
                 {"params": self.const_tensor, "weight_decay": 0.0}
             )
-        # return optimizer_transformer,optimizer_mlp
         return optimizer
