@@ -100,9 +100,7 @@ class m3_inference:
 
         size_bucket_list = self.bdp_dict_db[n_hosts]
         size_bucket_list_output = self.bdp_dict_db_output[n_hosts]
-        print(f"spec-1: {spec}, {topo_type}")   
         spec=f'data_lr10Gbps'
-        print(f"spec-2: {spec}")
         
         dir_input_tmp = f"{self.dir_input}/{spec}"
         param_data = PARAM_VEC_INIT
