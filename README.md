@@ -48,12 +48,11 @@ git submodule update --init --recursive
 4. For setting up the HPCC repository for data generation, follow the detailed instructions in `parsimon/backends/High-Precision-Congestion-Control/simulation/README.md`:
 
 ```bash
-cd parsimon/backends/High-Precision-Congestion-Control
-cd simulation
+cd parsimon/backends/High-Precision-Congestion-Control/simulation
 CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
 ```
 
-4. To generate data for m3, adjust generation parameters in `parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs` (lines 34-37) and data parameters in `simulation/consts.py`. Then, run:
+4. To generate data for m3, run:
 
 ```bash
 cd gen_path
@@ -62,15 +61,16 @@ cargo run --release -- --python-path {path_to_python} --output-dir {dir_to_save_
 e.g., 
 cargo run --release -- --python-path /data1/lichenni/software/anaconda3/envs/py39/bin/python --output-dir /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data
 ```
+Note to adjust generation parameters in `parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs` (lines 34-37) and `simulation/consts.py`. 
 
 5. For training the model, ensure you're using the Python 3 environment and configure settings in `config/train_config_path.yaml`. Then execute:
 
 ```bash
 cd m3
-python main_path.py --train_config=./config/train_config_path.yaml --mode=train --dir_input={dir_to_save_data} --dir_output={dir_to_save_ckpts}
+python main_train.py --train_config=./config/train_config_path.yaml --mode=train --dir_input={dir_to_save_data} --dir_output={dir_to_save_ckpts}
 
 e.g., 
-python main_path.py --train_config=./config/train_config_path.yaml --mode=train --dir_input=/data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data --dir_output=/data1/lichenni/m3/ckpts
+python main_train.py --train_config=./config/train_config_path.yaml --mode=train --dir_input=/data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data --dir_output=/data1/lichenni/m3/ckpts
 ```
 Note to change the gpu_id in `config/train_config_path.yaml` to the desired GPU ID you wish to use. For example, we set it to [0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3], which means we use GPUs-[0,1,2,3] with 4 processes on each GPU. FYI, the default PytorchLightning does not support multi-worker training on a single GPU, which requries specific modifications.
 Also, change the configurations for the dataset or model for your specific use case.
@@ -137,7 +137,7 @@ Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/ana
 ├── parsimon-eval  # Scripts to reproduce m3 experiments and comparisons
 ├── util           # Utility functions for m3, including data loader and ML model implementations
 ├── gen_ckpts.py   # Script to generate checkpoints for m3
-└── main_path.py   # Main script for training and testing m3
+└── main_train.py   # Main script for training and testing m3
 ```
 
 # Citation Information
