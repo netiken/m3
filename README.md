@@ -20,7 +20,7 @@ The following steps provide a quick guide to reproduce the results in the paper.
 
 ## From Scratch
 
-Before you begin, ensure you have installed: Python 3, Rust, Cargo, gcc-9, and gcc-5. Use `environment.yml` conda environment files for Python setup, and follow additional instructions for other packages.
+Before you begin, ensure you have installed: Python 3, Rust, Cargo (nightly Version), gcc-9 (for compiling the flowSim and inference), and gcc-5 (for running ns-3). For Python setup, use the `environment.yml` conda environment file, and follow the additional instructions for installing the other packages.
 
 ```bash
 conda env create -f environment.yml
