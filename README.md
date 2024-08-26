@@ -13,24 +13,52 @@ This repository houses the scripts and guidance needed to replicate the experime
 ## Quick Reproduction
 The following steps provide a quick guide to reproduce the results in the paper.
 
-1. To replicate paper results in Section 5.2, run the script `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb.ipynb`.
-
-2. To replicate paper results in Section 5.3, run the script `parsimon-eval/expts/fig_7/analysis/analysis.ipynb`.
-
-3. To replicate paper results in Section 5.4, run the script `parsimon-eval/expts/fig_8/analysis/analysis_counterfactual.ipynb`.
-
-## From Scratch
-
-Before you begin, ensure you have installed: Python 3, Rust, Cargo (nightly Version), gcc-9 (for compiling the flowSim and inference), and gcc-5 (for running ns-3). For Python setup, use the `environment.yml` conda environment file, and follow the additional instructions for installing the other packages.
-
-```bash
-conda env create -f environment.yml
-```
-
-1. To install m3, execute: 
+1. First, clone the repository and install the necessary dependencies. To install m3, execute: 
 ```bash
 git clone https://github.com/netiken/m3.git
 cd m3
+# Initialize the submodules, including parsimon, parsimon-eval, and HPCC
+git submodule update --init --recursive
+```
+
+2. To replicate paper results in Section 5.2, run the notebook `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb`.
+
+3. To replicate paper results in Section 5.3, run the notebook `parsimon-eval/expts/fig_7/analysis/analysis.ipynb`.
+
+4. To replicate paper results in Section 5.4, run the notebook `parsimon-eval/expts/fig_8/analysis/analysis_counterfactual.ipynb`.
+
+## From Scratch
+
+1. Ensure you have installed: Python 3, Rust, Cargo (nightly Version), gcc-9 (for compiling the flowSim and inference), and gcc-5 (for running ns-3). For example, use the `environment.yml` conda environment file, and follow the additional instructions for installing the other packages. 
+
+```bash
+# Create a new conda environment for Python 3.9
+conda env create -f environment.yml
+```
+
+```bash
+# Install Rust and Cargo, https://www.rust-lang.org/tools/install
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# setup the path and check the installation using rustc --version. Then switch to nightly version
+rustup install nightly
+rustup default nightly
+```
+
+```bash
+# Install gcc-5 via https://askubuntu.com/questions/1235819/ubuntu-20-04-gcc-version-lower-than-gcc-7
+sudo vim /etc/apt/sources.list
+# Add the following lines in the sources.list file
+deb http://dk.archive.ubuntu.com/ubuntu/ xenial main
+deb http://dk.archive.ubuntu.com/ubuntu/ xenial universe
+# Update the package list
+sudo apt update
+# Install gcc-5
+sudo apt install gcc-5 g++-5
+```
+
+```bash
+# Install gcc-9
+sudo apt-get install gcc-9 g++-9
 ```
 
 2. To build the C libraries for m3 via gcc-9:
@@ -40,21 +68,16 @@ make run
 cd ..
 ```
 
-3. To initialize the submodules, including parsimon, parsimon-eval, and HPCC:
-
-```bash
-git submodule update --init --recursive
-```
-
-4. For setting up the HPCC repository for data generation, follow the detailed instructions in `parsimon/backends/High-Precision-Congestion-Control/simulation/README.md`:
+3. For setting up the HPCC repository for data generation, follow the detailed instructions in `parsimon/backends/High-Precision-Congestion-Control/simulation/README.md`:
 
 ```bash
 cd parsimon/backends/High-Precision-Congestion-Control/simulation
 CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
 ```
-5. The checkpotins for the end-to-end m3 pipeline are available in the `ckpts` directory. You can use them directly for the following steps. Please refer to the section [Train your own model](#train-your-own-model) for training the model from scratch.
 
-6. To replicate paper results in Section 5.2, run the following in the `parsimon-eval/expts/fig_8` directory:
+4. The checkpotins for the end-to-end m3 pipeline are available in the `ckpts` directory. You can use them directly for the following steps. Please refer to the section [Train your own model](#train-your-own-model) for training the model from scratch.
+
+5. To replicate paper results in Section 5.2, run the following in the `parsimon-eval/expts/fig_8` directory:
 
 ```bash
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json ns3-config
@@ -62,10 +85,10 @@ cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json pmn-m
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json mlsys
 ```
 
-Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb.ipynb`.
+Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb`.
 Note that ns3-config is time-consuming and may take 1-7 days to complete.
 
-7. To replicate paper results in Section 5.3, run the following in the `parsimon-eval/expts/fig_7` directory:
+6. To replicate paper results in Section 5.3, run the following in the `parsimon-eval/expts/fig_7` directory:
 
 ```bash
 cargo run --release -- --root=./data --mix spec/0.mix.json ns3
@@ -80,7 +103,7 @@ cargo run --release -- --root=./data --mix spec/1.mix.json mlsys
 
 Then reproduce the results in the script `parsimon-eval/expts/fig_7/analysis/analysis.ipynb`.
 
-8. To replicate paper results in Section 5.4, run the following in the `parsimon-eval/expts/fig_8` directory:
+7. To replicate paper results in Section 5.4, run the following in the `parsimon-eval/expts/fig_8` directory:
 
 ```bash
 cargo run --release -- --root=./data_hpcc --mixes spec/all_counterfactual_hpcc.mix.json ns3-config
@@ -99,23 +122,44 @@ Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/ana
 1. To generate data for training and testing your own model, run:
 
 ```bash
-cd gen_path
+cd parsimon/backends/High-Precision-Congestion-Control/gen_path
 cargo run --release -- --python-path {path_to_python} --output-dir {dir_to_save_data}
 
 e.g., 
-cargo run --release -- --python-path /data1/lichenni/software/anaconda3/envs/py39/bin/python --output-dir /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data
+cargo run --release -- --python-path /data1/lichenni/software/anaconda3/envs/py39/bin/python --output-dir /data1/lichenni/m3/data
 ```
-Note to adjust generation parameters in `parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs` (lines 34-37) and `simulation/consts.py`. 
+Note to adjust generation parameters in `parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs` (lines 34-37) and `parsimon/backends/High-Precision-Congestion-Control/simulation/consts.py`. 
 
+```rust
+// parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs
+shard: (0..2000).collect(), // number of diverse workloads
+n_flows: vec![20000], // number of flows per (src, dst) host pair
+n_hosts: vec![3, 5, 7], // type of multi-hop paths, e.g., 2-hop, 4-hop, 6-hop
+shard_cc: (0..20).collect(), // number of diverse network configurations, such different CCAs, CCA parameters, etc.
 
-2. For training the model, ensure you're using the Python 3 environment and configure settings in `config/train_config_path.yaml`. Then execute:
+// We use the following parameters to generate the demo data to test
+shard: (0..100).collect(), // number of diverse workloads
+n_flows: vec![100], // number of flows per (src, dst) host pair
+n_hosts: vec![3], // type of multi-hop paths, e.g., 2-hop, 4-hop, 6-hop
+shard_cc: (0..1).collect(), // number of diverse network configurations, such different CCAs, CCA parameters, etc.
+```
+
+```python
+# parsimon/backends/High-Precision-Congestion-Control/simulation/consts.py
+bfsz=[20,50,10] # The buffer size in KB is uniformly sampled from [bfsz[0], bfsz[1]] * bfsz[2]
+fwin=[5, 30,1000] # The window size in Byte is uniformly sampled from [fwin[0], fwin[1]] * fwin[2]
+enable_pfc=[0,1] # Enable PFC or not
+
+```
+
+2. For training the model, ensure you're using the Python 3 environment and configure settings in `config/train_config_path.yaml`. See the detailed configurations in `config/train_config_path.yaml` for the dataset, model, and training parameters. Then execute:
 
 ```bash
 cd m3
 python main_train.py --train_config=./config/train_config_path.yaml --mode=train --dir_input={dir_to_save_data} --dir_output={dir_to_save_ckpts}
 
 e.g., 
-python main_train.py --train_config=./config/train_config_path.yaml --mode=train --dir_input=/data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data --dir_output=/data1/lichenni/m3/ckpts
+python main_train.py --train_config=./config/train_config_path_demo.yaml --mode=train --dir_input=/data1/lichenni/m3/data --dir_output=/data1/lichenni/m3/
 ```
 Note to change the gpu_id in `config/train_config_path.yaml` to the desired GPU ID you wish to use. For example, we set it to [0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3], which means we use GPUs-[0,1,2,3] with 4 processes on each GPU. FYI, the default PytorchLightning does not support multi-worker training on a single GPU, which requries specific modifications.
 Also, change the configurations for the dataset or model for your specific use case.

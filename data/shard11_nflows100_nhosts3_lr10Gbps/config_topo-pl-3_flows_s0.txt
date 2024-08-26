@@ -1,0 +1,68 @@
+ENABLE_QCN 1
+ENABLE_PFC 1
+USE_DYNAMIC_PFC_THRESHOLD 1
+
+PACKET_PAYLOAD_SIZE 1000
+
+TOPOLOGY_FILE /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/simulation/mix_m3/topo-pl-3.txt
+FLOW_FILE /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data/shard11_nflows100_nhosts3_lr10Gbps/flows.txt
+FLOW_ON_PATH_FILE /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data/shard11_nflows100_nhosts3_lr10Gbps/flows_on_path.txt
+FLOW_PATH_MAP_FILE /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data/shard11_nflows100_nhosts3_lr10Gbps/flows_path_map.txt
+TRACE_FILE /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/simulation/mix_m3/trace-pl-3.txt
+TRACE_OUTPUT_FILE /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data/shard11_nflows100_nhosts3_lr10Gbps/mix_topo-pl-3_s0.tr
+FCT_OUTPUT_FILE /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data/shard11_nflows100_nhosts3_lr10Gbps/fct_topo-pl-3_s0.txt
+PFC_OUTPUT_FILE /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data/shard11_nflows100_nhosts3_lr10Gbps/pfc_topo-pl-3_s0.txt
+
+SIMULATOR_STOP_TIME 4
+
+CC_MODE 7
+ALPHA_RESUME_INTERVAL 1
+RATE_DECREASE_INTERVAL 4
+CLAMP_TARGET_RATE 0
+RP_TIMER 300
+EWMA_GAIN 0.00390625
+FAST_RECOVERY_TIMES 1
+RATE_AI 10.0Mb/s
+RATE_HAI 50.0Mb/s
+MIN_RATE 1000Mb/s
+MAX_RATE 10000Mb/s
+DCTCP_RATE_AI 1000Mb/s
+TIMELY_T_HIGH 121010
+TIMELY_T_LOW 54498
+TIMELY_BETA 0.8
+
+ERROR_RATE_PER_LINK 0.0000
+L2_CHUNK_SIZE 4000
+L2_ACK_INTERVAL 1
+L2_BACK_TO_ZERO 0
+
+HAS_WIN 1
+GLOBAL_T 1
+VAR_WIN 1
+FAST_REACT 0
+U_TARGET 0.95
+MI_THRESH 0
+INT_MULTI 1
+MULTI_RATE 0
+SAMPLE_FEEDBACK 0
+PINT_LOG_BASE 1.05
+PINT_PROB 1.0
+
+RATE_BOUND 1
+
+ACK_HIGH_PRIO 1
+
+LINK_DOWN 0 0 0
+
+ENABLE_TRACE 0
+
+KMAX_MAP 2 10000000000 16 40000000000 64
+KMIN_MAP 2 10000000000 4 40000000000 16
+PMAX_MAP 2 10000000000 0.20 40000000000 0.20
+BUFFER_SIZE 254
+QLEN_MON_FILE /data1/lichenni/m3/parsimon/backends/High-Precision-Congestion-Control/gen_path/data/shard11_nflows100_nhosts3_lr10Gbps/qlen_topo-pl-3_s0.txt
+QLEN_MON_START 1000000000
+QLEN_MON_END 3000000000
+
+FIXED_WIN 5486
+BASE_RTT 14400

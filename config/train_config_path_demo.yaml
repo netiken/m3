@@ -1,0 +1,45 @@
+# YAML config for dataset, training, and model parameters
+
+# Dataset parameters
+dataset:
+  shard: 0 # random seed for running scripts
+  shard_list: [0,100,100] # number of diverse workloads. It is consistent with the number of diverse workloads in the dataset in parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs
+  n_flows_list: [100] # number of flows per (src,dst) host pair. It is consistent with the number of flows in the dataset in parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs
+  n_hosts_list: [3] # type of multi-hop paths, e.g., 2-hop, 4-hop, 6-hop. It is consistent with the type of multi-hop paths in the dataset in parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs
+  sample_list: [0,1,1] # number of diverse network configurations. It is consistent with the number of diverse network configurations in the dataset in parsimon/backends/High-Precision-Congestion-Control/gen_path/src/main.rs
+  lr: 10 # link rate in Gbps
+  bucket_thold: 1 # bucket threshold used to filter out the flows size bucket with less than the threshold
+  train_frac: 0.9 # fraction of the dataset used for training
+  enable_context: True # enable context information for the feature map used in m3
+  topo_type: "_topo-pl-x_" # topology type used in the dataset. No need to change
+  n_params: 19 # number of parameters used to encode the network configurations. These parameters will be appended to the feature map used in m3
+
+# Model parameters
+model:
+  model_name: "transformer" # model name
+  n_layer: 4 # number of layers
+  n_head: 4 # number of heads
+  n_embd: 576 # embedding dimension
+  block_size: 16 # block size
+  vocab_size: 200 # vocabulary size
+  dropout: 0.2 # dropout rate
+  compile: False 
+  loss_fn_type: "l1" # loss function type
+  hidden_dims: [512,512] # hidden dimensions
+  enable_position: True # enable positional encoding
+
+# Training parameters
+training:
+  # gpu: [0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3]
+  gpu: [0] # gpu ids
+  n_epochs: 500 # number of epochs
+  batch_size: 4 # batch size
+  learning_rate: 0.0001 # learning rate
+  betas: [0.9, 0.95] # betas
+  weight_decay: 0.02 # weight decay
+  num_workers: 1 # number of workers
+  enable_val: True # enable validation
+  enable_dist: True # enable distributed training
+  enable_masked_loss: True # enable masked loss
+  enable_weighted_loss: False # enable weighted loss
+  enable_log: False # enable logging
