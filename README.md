@@ -10,10 +10,7 @@ This repository houses the scripts and guidance needed to replicate the experime
 - [Acknowledgments](#acknowledgments)
 - [Getting in Touch](#getting-in-touch)
 
-## Quick Reproduction
-The following steps provide a quick guide to reproduce the results in the paper.
-
-1. First, clone the repository and install the necessary dependencies. To install m3, execute: 
+First, clone the repository and install the necessary dependencies. To install m3, execute: 
 ```bash
 git clone https://github.com/netiken/m3.git
 cd m3
@@ -21,11 +18,14 @@ cd m3
 git submodule update --init --recursive
 ```
 
-2. To replicate paper results in Section 5.2, run the notebook `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb`.
+## Quick Reproduction
+The following steps provide a quick guide to reproduce the results in the paper.
 
-3. To replicate paper results in Section 5.3, run the notebook `parsimon-eval/expts/fig_7/analysis/analysis.ipynb`.
+1. To replicate paper results in Section 5.2, run the notebook `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb`.
 
-4. To replicate paper results in Section 5.4, run the notebook `parsimon-eval/expts/fig_8/analysis/analysis_counterfactual.ipynb`.
+2. To replicate paper results in Section 5.3, run the notebook `parsimon-eval/expts/fig_7/analysis/analysis.ipynb`.
+
+3. To replicate paper results in Section 5.4, run the notebook `parsimon-eval/expts/fig_8/analysis/analysis_counterfactual.ipynb`.
 
 ## From Scratch
 
@@ -34,6 +34,7 @@ git submodule update --init --recursive
 ```bash
 # Create a new conda environment for Python 3.9
 conda env create -f environment.yml
+conda activate m3
 ```
 
 ```bash
@@ -80,12 +81,13 @@ CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
 5. To replicate paper results in Section 5.2, run the following in the `parsimon-eval/expts/fig_8` directory:
 
 ```bash
+# all_dctcp.mix.json provides 5 simulation configurations. The entire list of configurations is available in all_dctcp_full.mix.json
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json ns3-config
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json pmn-m
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json mlsys
 ```
 
-Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb`.
+Then reproduce the results in the notebook `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb`.
 Note that ns3-config is time-consuming and may take 1-7 days to complete.
 
 6. To replicate paper results in Section 5.3, run the following in the `parsimon-eval/expts/fig_7` directory:
@@ -101,7 +103,7 @@ cargo run --release -- --root=./data --mix spec/1.mix.json mlsys
 
 ```
 
-Then reproduce the results in the script `parsimon-eval/expts/fig_7/analysis/analysis.ipynb`.
+Then reproduce the results in the notebook `parsimon-eval/expts/fig_7/analysis/analysis.ipynb`.
 
 7. To replicate paper results in Section 5.4, run the following in the `parsimon-eval/expts/fig_8` directory:
 
@@ -115,9 +117,11 @@ cargo run --release -- --root=./data_window --mixes spec/all_counterfactual_wind
 cargo run --release -- --root=./data_window --mixes spec/all_counterfactual_window.mix.json mlsys
 ```
 
-Then reproduce the results in the script `parsimon-eval/expts/fig_8/analysis/analysis_counterfactual.ipynb`.
+Then reproduce the results in the notebook `parsimon-eval/expts/fig_8/analysis/analysis_counterfactual.ipynb`.
 
 # Train your own model
+
+* Please use the demo data in `data` in the main directory to test the training process.
 
 1. To generate data for training and testing your own model, run:
 
