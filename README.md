@@ -73,7 +73,7 @@ cd ..
 
 ```bash
 cd parsimon/backends/High-Precision-Congestion-Control/simulation
-CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
+CC='gcc-5' CXX='g++-5' CXXFLAGS='-std=c++11' ./waf configure --build-profile=optimized
 ```
 
 4. The checkpotins for the end-to-end m3 pipeline are available in the `ckpts` directory. You can use them directly for the following steps. Please refer to the section [Train your own model](#train-your-own-model) for training the model from scratch.
@@ -81,7 +81,7 @@ CC='gcc-5' CXX='g++-5' ./waf configure --build-profile=optimized
 5. To replicate paper results in Section 5.2, run the following in the `parsimon-eval/expts/fig_8` directory:
 
 ```bash
-# all_dctcp.mix.json provides 5 simulation configurations. The entire list of configurations is available in all_dctcp_full.mix.json
+# all_dctcp.mix.json provides 1 simulation configuration. The entire list of configurations is available in all_dctcp_full.mix.json
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json ns3-config
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json pmn-m
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json mlsys
