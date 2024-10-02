@@ -86,6 +86,7 @@ cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json ns3-config
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json pmn-m
 cargo run --release -- --root=./data --mixes spec/all_dctcp.mix.json mlsys
 ```
+**Note:** m3 uses the [HPCC Codebase](https://github.com/alibaba-edu/High-Precision-Congestion-Control) to run ns-3. Most errors you may encounter are likely related to the ns-3 setup. If so, please check if the directory `m3/parsimon-eval/expts/fig_8/data/0/ns3-config/2/` exists. You should find the bug details in `m3/parsimon-eval/expts/fig_8/data/0/ns3-config/2/output.txt`.
 
 Then reproduce the results in the notebook `parsimon-eval/expts/fig_8/analysis/analysis_dctcp.ipynb`.
 Note that ns3-config is time-consuming and may take 1-7 days to complete.
